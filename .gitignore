@@ -1,0 +1,17 @@
+#Binary files
+bin
+*.class
+
+#Eclipse files
+.project
+.settings
+.classpath
+
+#Temporary files
+*~
+
+#Maven files
+target
+
+#Other
+deploy.sh
