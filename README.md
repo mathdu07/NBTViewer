@@ -26,6 +26,10 @@ License
 NBT Viewer is distributed under the GNU GPLv3 License, so that you can freely modify and share it !
 ![GNU_GPLv3](http://www.gnu.org/graphics/gplv3-127x51.png "GNU GPLv3")
 
+Jenkins
+-------
+To get development versions, go to [jenkins](http://cho-patate.zapto.org:6100/job/NBT-Viewer/).
+
 Author
 ------
 [mathdu07](https://github.com/mathdu07)
