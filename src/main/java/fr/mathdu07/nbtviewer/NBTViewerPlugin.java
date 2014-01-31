@@ -76,9 +76,20 @@ public class NBTViewerPlugin extends JavaPlugin {
 	 * @param sender 
 	 */
 	public static void printNBT(NBTItemStack nbt, CommandSender sender) {
+		printNBT(nbt, sender, "");		
+	}
+	
+	/**
+	 * Print the object's NBT to the given sender
+	 * @param nbt - object which use NBT
+	 * @param sender 
+	 */
+	public static void printNBT(NBTItemStack nbt, CommandSender sender, String objectName) {
 		final NBTTagCompound compound = nbt.getRootTag();
-		sender.sendMessage("NBT :");
+		sender.sendMessage("--------------------------------------");
+		sender.sendMessage((objectName.isEmpty() ? "" : objectName + "'s ") + "NBT : ");
 		sender.sendMessage(developNBTTree(compound));
+		sender.sendMessage("--------------------------------------");
 		
 	}
 	

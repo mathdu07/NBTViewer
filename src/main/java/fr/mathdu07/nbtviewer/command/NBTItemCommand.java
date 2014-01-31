@@ -55,7 +55,7 @@ public class NBTItemCommand extends NBTCommand {
 		if (nbt.getRootTag() == null)
 			sender.sendMessage("This item does not contain NBT");
 		else
-			NBTViewerPlugin.printNBT(nbt, sender);
+			NBTViewerPlugin.printNBT(nbt, sender, ChatColor.GOLD + is.getType().toString() + ChatColor.RESET);
 		
 		return true;
 	}
