@@ -12,14 +12,16 @@ Commands
 --------
 *For all commands, please refer to the [plugin.yml](src/main/resources/plugin.yml)*
 
-+ /nbtitem : Print the NBT of the item on your hand
+* /nbtitem : Print the NBT of the item on your hand
+* /nbthelp : Show the help of this plugin
 
 Permissions
 -----------
 *For all permissions, please refer to the [plugin.yml](src/main/resources/plugin.yml)*
 
-+ nbtviewer.* : Gives all plugin's permission
-    + nbtviewer.item: Gives the permission to use the command */nbtitem*
+* nbtviewer.* : Gives all plugin's permission
+    * nbtviewer.item: Gives the permission to use the command */nbtitem*
+    * nbtviewer.help: Gives the permission to use the command */nbthelp*
     
 License
 -------
