@@ -33,8 +33,11 @@ public abstract class NBTCommand {
 	 */
 	private final Command bukkitCommand;
 	
+	protected final NBTCommandExecutor executor;
+	
 	public NBTCommand(PluginCommand command,  NBTCommandExecutor executor) {
 		this.bukkitCommand = command;
+		this.executor = executor;
 		command.setExecutor(executor);
 	}
 

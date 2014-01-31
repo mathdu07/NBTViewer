@@ -32,6 +32,7 @@ public class NBTCommandExecutor implements CommandExecutor {
 	public NBTCommandExecutor() {
 		this.commands = new ArrayList<NBTCommand>();
 		this.commands.add(new NBTItemCommand(this));
+		this.commands.add(new NBTHelpCommand(this));
 	}
 
 	public boolean onCommand(CommandSender send, Command cmd, String label, String[] args) {
@@ -45,37 +46,8 @@ public class NBTCommandExecutor implements CommandExecutor {
 		return false;
 	}
 	
-	/**
-	 * Shows the help to the command sender
-	 * TODO Add in nbthelp command
-	 * @param send
-	 * @param label
-	 * @param args
-	 */
-	/*private void showHelp(CommandSender send, String label, String[] args) {
-		final int commandsPerPage = 5, pages = (int) Math.ceil(commands.size()/(commandsPerPage * 1.0));
-		int page = 1;
-		
-		if (args.length >= 2) {
-			try {
-				page = Integer.parseInt(args[1]);
-			} catch (NumberFormatException e) {
-				send.sendMessage(ChatColor.RED + "\'" + args[1] + "\' isn't an integer");
-			}
-		}
-		
-		if (page < 1 || page > pages) {
-			send.sendMessage(ChatColor.RED + "The page's number must be between 1 & " + pages);
-			return;
-		}
-		
-		send.sendMessage("+----------[NBT Help " + page + "/" + pages + "]----------+");
-		for (int i = (page - 1) * commandsPerPage ; i < commands.size() && i < page * commandsPerPage; i++)  {
-			NBTCommand command = commands.get(i);
-			send.sendMessage(command.getUsage() + " " + ChatColor.GRAY + command.getDescription());
-		}
-		send.sendMessage("+----------------------------------+");
-	}*/
-
+	protected List<NBTCommand> getCommands() {
+		return commands;
+	}
 
 }

@@ -9,11 +9,18 @@ commands:
     description: Print the NBT of the item in your hand
     permission: nbtviewer.item
     aliases: [nbti]
+  nbthelp:
+    description: Show the help of this plugin
+    permission: nbtviewer.help
+    aliases: [nbth, "nbt?"]
 permissions:
   nbtviewer.*:
     default: false
     children:
       nbtviewer.item: true
+      nbtviewer.help: true
   nbtviewer.item:
-    default: op 
+    default: op
+  nbtviewer.help:
+    default: true
     
