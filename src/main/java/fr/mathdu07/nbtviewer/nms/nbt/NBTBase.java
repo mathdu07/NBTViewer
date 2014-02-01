@@ -198,7 +198,7 @@ public abstract class NBTBase {
 			}  else if (getNBTClass((byte) 9).isInstance(o)) {
 				final Class<?> NBTClass = getNBTClass((byte) 9);
 				int size = (Integer) NBTClass.getMethod("size", new Class<?>[0]).invoke(o);
-				final Method get = NBTClass.getMethod("get", Integer.class);
+				final Method get = NBTClass.getMethod("get", int.class);
 				final NBTTagList tag = new NBTTagList((String) name.invoke(o));
 				
 				for (int i = 0; i < size; i++)
@@ -212,7 +212,9 @@ public abstract class NBTBase {
 				
 				while (values.hasNext()) {
 					NBTBase base = NMSToTag(values.next());
-					tag.set(base.name, base);
+					
+					if (base != null)
+						tag.set(base.name, base);
 				}
 				
 				return tag;

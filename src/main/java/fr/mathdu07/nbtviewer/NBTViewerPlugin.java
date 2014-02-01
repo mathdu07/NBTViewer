@@ -32,6 +32,8 @@ import fr.mathdu07.nbtviewer.command.NBTCommandExecutor;
 import fr.mathdu07.nbtviewer.nms.NBTItemStack;
 import fr.mathdu07.nbtviewer.nms.nbt.NBTBase;
 import fr.mathdu07.nbtviewer.nms.nbt.NBTTagCompound;
+import fr.mathdu07.nbtviewer.nms.nbt.NBTTagList;
+
 
 public class NBTViewerPlugin extends JavaPlugin {
 	
@@ -94,16 +96,44 @@ public class NBTViewerPlugin extends JavaPlugin {
 	}
 	
 	private static String[] developNBTTree(NBTTagCompound tag) {
+		return developNBTTree(tag, 0);
+	}
+	
+	private static String[] developNBTTree(NBTTagCompound tag, int level) {
 		final List<String> list = new ArrayList<String>();
+		String spacer = "";
+		
+		for (int i = 0; i < level; i++)
+			spacer += "  ";
+		
+		list.add(spacer + (tag.getName() == "" ? "*"  : tag.toString()));
+		
+		spacer += "  ";
 		
 		for (NBTBase base : tag.getValues()) {
-			list.add(base.toString());
+			list.add(spacer + base.toString());
 			
 			if (base instanceof NBTTagCompound) {
-				final String[] tags = developNBTTree((NBTTagCompound) base);
+				final String[] tags = developNBTTree((NBTTagCompound) base, level + 1);
+				list.remove(list.size() - 1);
 				
 				for (String str : tags) 
-					list.add("  " + str);
+					list.add(str);
+			} else if (base instanceof NBTTagList) {
+				final NBTTagList tagList = (NBTTagList) base;
+				
+				for (int i = 0; i < tagList.size(); i++) {
+					final NBTBase child = tagList.get(i);
+					
+					if (child instanceof NBTTagCompound) {
+						final String[] tags = developNBTTree((NBTTagCompound) child, level + 1);
+						
+						for (String s : tags)
+							list.add(spacer + s);
+					} else
+						list.add(spacer + "  " + child);
+				}
+					
 			}
 		}
 		
