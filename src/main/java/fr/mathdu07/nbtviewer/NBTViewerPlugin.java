@@ -171,23 +171,13 @@ public class NBTViewerPlugin extends JavaPlugin {
 	}
 	
 	static {
-		//Beta builds
-		mapPackageNMS.put("1.7.2-R0.2", "net.minecraft.server.v1_7_R1");
-		mapPackageNMS.put("1.7.2-R0.1", "net.minecraft.server.v1_7_R1");
-		//Recommended builds
 		mapPackageNMS.put("1.6.4-R2.0", "net.minecraft.server.v1_6_R3");
 		mapPackageNMS.put("1.6.4-R1.0", "net.minecraft.server.v1_6_R3");
 		mapPackageNMS.put("1.6.2-R1.0", "net.minecraft.server.v1_6_R2");
-		mapPackageNMS.put("1.5.2-R1.0", "net.minecraft.server.v1_5_R3");
 		
-		//Beta builds
-		mapPackageCB.put("1.7.2-R0.2", "org.bukkit.craftbukkit.v1_7_R1");
-		mapPackageCB.put("1.7.2-R0.1", "org.bukkit.craftbukkit.v1_7_R1");
-		//Recommended builds
 		mapPackageCB.put("1.6.4-R2.0", "org.bukkit.craftbukkit.v1_6_R3");
 		mapPackageCB.put("1.6.4-R1.0", "org.bukkit.craftbukkit.v1_6_R3");
 		mapPackageCB.put("1.6.2-R1.0", "org.bukkit.craftbukkit.v1_6_R2");
-		mapPackageCB.put("1.5.2-R1.0", "org.bukkit.craftbukkit.v1_5_R3");
 	}
 
 }
