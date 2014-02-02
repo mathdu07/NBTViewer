@@ -31,58 +31,45 @@ import fr.mathdu07.nbtviewer.NBTViewerPlugin;
  */
 public abstract class NBTBase {
 	
+	public static final Class<?> NMS_CLASS;
+	
+	private static final Method getName;
+	private static final Method equals;
+	private static final Method hashCode;
+
 	public static final String[] NBT_TYPES = new String[] 
 			{ "END", "BYTE", "SHORT", "INT", "LONG", "FLOAT", "DOUBLE", "BYTE[]", "STRING", "LIST", "COMPOUND", "INT[]"};
-	
-	protected final String name;
+
+	protected final Object nmsTag;
 	
     public abstract byte getTypeId();
 
-    protected NBTBase(String name) {
-        if (name == null) {
-            this.name = "";
-        } else {
-            this.name = name;
-        }
+    protected NBTBase(Object o) {
+    	this.nmsTag = o;
     }
 
+    /**
+     * @deprecated method removed in 1.7.2
+     * @return the tag's name, null if reflection exception
+     */
+    @Deprecated
     public String getName() {
-        return this.name == null ? "" : this.name;
+        try {
+			return (String) getName.invoke(nmsTag);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} 
     }
     
-    /*public static NBTBase createTag(byte id, String name) {
-    	
-        switch (id) {
-        case 0:
-            return new NBTTagEnd();
-        case 1:
-            return new NBTTagByte(name);
-        case 2:
-            return new NBTTagShort(name);
-        case 3:
-            return new NBTTagInt(name);
-        case 4:
-            return new NBTTagLong(name);
-        case 5:
-            return new NBTTagFloat(name);
-        case 6:
-            return new NBTTagDouble(name);
-        case 7:
-            return new NBTTagByteArray(name);
-        case 8:
-            return new NBTTagString(name);
-        case 9:
-            return new NBTTagList(name);
-        case 10:
-            return new NBTTagCompound(name);
-        case 11:
-            return new NBTTagIntArray(name);
-        default:
-            return null;
-        }
-    }*/
-    
-    public static Class<?> getNBTClass(byte id) {
+    /**
+     * @return the Net Minecraft Server tag object
+     */
+    public Object getNmsTag() {
+		return nmsTag;
+	}
+
+	public static Class<?> getNBTClass(byte id) {
     	try {
     		switch (id) {
     		case 0:
@@ -173,7 +160,7 @@ public abstract class NBTBase {
 				return new NBTTagEnd();
 			else if (getNBTClass((byte) 1).isInstance(o)) {
 				data = getNBTClass((byte) 1).getField("data");
-				return new NBTTagByte((String) name.invoke(o), (Byte) data.get(o));
+				return new NBTTagByte(o);
 			} else if (getNBTClass((byte) 2).isInstance(o)) {
 				data = getNBTClass((byte) 2).getField("data");
 				return new NBTTagShort((String) name.invoke(o), (Short) data.get(o));
@@ -214,7 +201,7 @@ public abstract class NBTBase {
 					NBTBase base = NMSToTag(values.next());
 					
 					if (base != null)
-						tag.set(base.name, base);
+						tag.set(base.getName(), base);
 				}
 				
 				return tag;
@@ -238,20 +225,46 @@ public abstract class NBTBase {
     public abstract NBTBase clone();
 
     public boolean equals(Object object) {
-        if (!(object instanceof NBTBase)) {
-            return false;
-        } else {
-            NBTBase nbtbase = (NBTBase) object;
-
-            return this.getTypeId() != nbtbase.getTypeId() ? false : ((this.name != null || nbtbase.name == null) && (this.name == null || nbtbase.name != null) ? this.name == null || this.name.equals(nbtbase.name) : false);
-        }
+    	if (object instanceof NBTBase) {
+			try {
+				return (Boolean) equals.invoke(nmsTag, ((NBTBase)object).nmsTag);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return false;
+			}
+    	} else
+    		return false;
     }
 
     public int hashCode() {
-        return this.name.hashCode() ^ this.getTypeId();
+        try {
+			return (Integer) hashCode.invoke(nmsTag);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return -1;
+		} 
     }
     
-    public static Class<?> getNMSClass() {
+    static {
+    	NMS_CLASS = getNMSClass();
+    	Method _getName = null;
+    	Method _equals = null;
+    	Method _hashCode = null;
+    	
+    	try {
+			_getName = NMS_CLASS.getMethod("getName");
+			_equals = NMS_CLASS.getMethod("equals", Object.class);
+			_hashCode = NMS_CLASS.getMethod("hashCode");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			getName = _getName;
+			equals = _equals;
+			hashCode = _hashCode;
+		}
+    }
+    
+    private static Class<?> getNMSClass() {
     	try {
 			return Class.forName(NBTViewerPlugin.getNMSPackage() + ".NBTBase");
 		} catch (ClassNotFoundException e) {
