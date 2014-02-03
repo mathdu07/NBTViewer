@@ -35,6 +35,9 @@ public class NBTTagByte extends NBTBase {
      */
     public NBTTagByte(Object nmsTagByte) {
         super(nmsTagByte);
+        
+	    if (!NMS_CLASS.isInstance(nmsTag))
+	    	throw new IllegalArgumentException("Object's class must be : " + NMS_CLASS);
     }
     
     /**

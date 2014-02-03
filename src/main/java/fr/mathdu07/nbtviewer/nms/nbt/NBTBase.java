@@ -21,13 +21,12 @@ package fr.mathdu07.nbtviewer.nms.nbt;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.Iterator;
 
 import fr.mathdu07.nbtviewer.NBTViewerPlugin;
 
 /*
  * TODO Make NBT Tag classes wrap the native one, instead of copying them
+ * TODO Make JUnit Test Case
  */
 public abstract class NBTBase {
 	
@@ -69,13 +68,14 @@ public abstract class NBTBase {
 		return nmsTag;
 	}
 
+    //TODO Replace Class.forName(...) by static field NMS_CLASS
 	public static Class<?> getNBTClass(byte id) {
     	try {
     		switch (id) {
     		case 0:
     			return Class.forName(NBTViewerPlugin.getNMSPackage() + ".NBTTagEnd");
             case 1:
-                return Class.forName(NBTViewerPlugin.getNMSPackage() + ".NBTTagByte");
+                return NBTTagByte.NMS_CLASS;
             case 2:
                 return Class.forName(NBTViewerPlugin.getNMSPackage() + ".NBTTagShort");
             case 3:
@@ -87,13 +87,13 @@ public abstract class NBTBase {
             case 6:
                 return Class.forName(NBTViewerPlugin.getNMSPackage() + ".NBTTagDouble");
             case 7:
-                return Class.forName(NBTViewerPlugin.getNMSPackage() + ".NBTTagByteArray");
+                return NBTTagByteArray.NMS_CLASS;
             case 8:
                 return Class.forName(NBTViewerPlugin.getNMSPackage() + ".NBTTagString");
             case 9:
                 return Class.forName(NBTViewerPlugin.getNMSPackage() + ".NBTTagList");
             case 10:
-                return Class.forName(NBTViewerPlugin.getNMSPackage() + ".NBTTagCompound");
+                return NBTTagCompound.NMS_CLASS;
             case 11:
                 return Class.forName(NBTViewerPlugin.getNMSPackage() + ".NBTTagIntArray");
     		default:
@@ -158,10 +158,9 @@ public abstract class NBTBase {
     	
 			if (getNBTClass((byte) 0).isInstance(o))
 				return new NBTTagEnd();
-			else if (getNBTClass((byte) 1).isInstance(o)) {
-				data = getNBTClass((byte) 1).getField("data");
+			else if (getNBTClass((byte) 1).isInstance(o))
 				return new NBTTagByte(o);
-			} else if (getNBTClass((byte) 2).isInstance(o)) {
+			else if (getNBTClass((byte) 2).isInstance(o)) {
 				data = getNBTClass((byte) 2).getField("data");
 				return new NBTTagShort((String) name.invoke(o), (Short) data.get(o));
 			} else if (getNBTClass((byte) 3).isInstance(o)) {
@@ -176,10 +175,9 @@ public abstract class NBTBase {
 			}  else if (getNBTClass((byte) 6).isInstance(o)) {
 				data = getNBTClass((byte) 6).getField("data");
 				return new NBTTagDouble((String) name.invoke(o), (Double) data.get(o));
-			}  else if (getNBTClass((byte) 7).isInstance(o)) {
-				data = getNBTClass((byte) 7).getField("data");
-				return new NBTTagByteArray((String) name.invoke(o), (byte[]) data.get(o));
-			}  else if (getNBTClass((byte) 8).isInstance(o)) {
+			}  else if (getNBTClass((byte) 7).isInstance(o))
+				return new NBTTagByteArray(o);
+			else if (getNBTClass((byte) 8).isInstance(o)) {
 				data = getNBTClass((byte) 8).getField("data");
 				return new NBTTagString((String) name.invoke(o), (String) data.get(o));
 			}  else if (getNBTClass((byte) 9).isInstance(o)) {
@@ -192,20 +190,9 @@ public abstract class NBTBase {
 					tag.add(NMSToTag(get.invoke(o, i)));
 				
 				return tag;
-			} else if (getNBTClass((byte) 10).isInstance(o)) {
-				final Class<?> NBTClass = getNBTClass((byte) 10);
-				final NBTTagCompound tag = new NBTTagCompound((String) name.invoke(o));
-				final Iterator<?> values = ((Collection<?>) NBTClass.getMethod("c", new Class<?>[0]).invoke(o)).iterator();
-				
-				while (values.hasNext()) {
-					NBTBase base = NMSToTag(values.next());
-					
-					if (base != null)
-						tag.set(base.getName(), base);
-				}
-				
-				return tag;
-			} else if (getNBTClass((byte) 11).isInstance(o)) {
+			} else if (getNBTClass((byte) 10).isInstance(o))
+				return new NBTTagCompound(o);
+			else if (getNBTClass((byte) 11).isInstance(o)) {
 				data = getNBTClass((byte) 11).getField("data");
 				return new NBTTagIntArray((String) name.invoke(o), (int[]) data.get(o));
 			}
