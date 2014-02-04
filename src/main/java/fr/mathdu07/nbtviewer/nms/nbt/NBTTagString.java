@@ -18,49 +18,120 @@
  */
 package fr.mathdu07.nbtviewer.nms.nbt;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
 import fr.mathdu07.nbtviewer.NBTViewerPlugin;
 
 public class NBTTagString extends NBTBase {
 	
-    public final String data;
+	public static final Class<?> NMS_CLASS;
+	private static final Method getTypeId, toString, clone, equals, hashCode;
+	private static final Field data;
 
-    public NBTTagString(String name) {
-        super(name);
-        this.data = "";
-    }
-
-    public NBTTagString(String name, String value) {
-        super(name);
-        this.data = value;
-        if (value == null) {
-            throw new IllegalArgumentException("Empty string not allowed");
-        }
+    /**
+     * Creates a wrapper of NBT Tag String
+     * @param nmsTagString - the Net Minecraft Server tag
+     */
+    public NBTTagString(Object nmsTagString) {
+        super(nmsTagString);
+        
+	    if (!NMS_CLASS.isInstance(nmsTag))
+	    	throw new IllegalArgumentException("Object's class must be : " + NMS_CLASS);
     }
     
+    /**
+     * @return the tag's data
+     */
+    public String getData() {
+    	try {
+			return (String) data.get(nmsTag);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+    }
+    
+    /**
+     * @return the type id of the tag, -1 if an exception is thrown
+     */
     public byte getTypeId() {
-        return (byte) 8;
+        try {
+			return (Byte) getTypeId.invoke(nmsTag);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return -1;
+		}
     }
 
+    /**
+     * @return null if exception is an thrown
+     */
+    @Override
     public String toString() {
-        return name + ": \"" + this.data + "\"";
+        try {
+			return (String) toString.invoke(nmsTag);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
     }
-
+    
+    /**
+     * @return a clone of this NBT Tag, or null if an exception is thrown
+     */
     public NBTBase clone() {
-        return new NBTTagString(this.getName(), this.data);
+        try {
+			return new NBTTagString(clone.invoke(nmsTag));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
     }
 
     public boolean equals(Object object) {
-        if (!super.equals(object)) {
-            return false;
-        } else {
-            NBTTagString nbttagstring = (NBTTagString) object;
-
-            return this.data == null && nbttagstring.data == null || this.data != null && this.data.equals(nbttagstring.data);
-        }
+    	if (object instanceof NBTTagString) {
+			try {
+				return (Boolean) equals.invoke(nmsTag, ((NBTTagString)object).nmsTag);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return false;
+			}
+    	} else
+    		return false;
     }
 
     public int hashCode() {
-        return super.hashCode() ^ this.data.hashCode();
+        try {
+			return (Integer) hashCode.invoke(nmsTag);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return -1;
+		}
+    }
+    
+    static {
+    	NMS_CLASS = getNMSClass();
+    	Method _getTypeId = null, _toString = null, _clone = null, _equals = null, _hashCode = null;
+    	Field _data = null;
+    	
+    	try {
+    		_getTypeId = NMS_CLASS.getMethod("getTypeId");
+    		_toString = NMS_CLASS.getMethod("toString");
+    		_clone = NMS_CLASS.getMethod("clone");
+    		_equals = NMS_CLASS.getMethod("equals", Object.class);
+    		_hashCode = NMS_CLASS.getMethod("hashCode");
+    		_data = NMS_CLASS.getField("data");
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	} finally {
+    		getTypeId = _getTypeId;
+    		toString = _toString;
+    		clone = _clone;
+    		equals = _equals;
+    		hashCode = _hashCode;
+    		data = _data;
+    	}
     }
     
     public static Class<?> getNMSClass() {

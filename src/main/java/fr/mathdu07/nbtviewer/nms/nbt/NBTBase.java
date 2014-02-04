@@ -18,14 +18,11 @@
  */
 package fr.mathdu07.nbtviewer.nms.nbt;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import fr.mathdu07.nbtviewer.NBTViewerPlugin;
 
 /*
- * TODO Make NBT Tag classes wrap the native one, instead of copying them
  * TODO Make JUnit Test Case
  */
 public abstract class NBTBase {
@@ -68,39 +65,34 @@ public abstract class NBTBase {
 		return nmsTag;
 	}
 
-    //TODO Replace Class.forName(...) by static field NMS_CLASS
 	public static Class<?> getNBTClass(byte id) {
-    	try {
-    		switch (id) {
-    		case 0:
-    			return Class.forName(NBTViewerPlugin.getNMSPackage() + ".NBTTagEnd");
-            case 1:
-                return NBTTagByte.NMS_CLASS;
-            case 2:
-                return Class.forName(NBTViewerPlugin.getNMSPackage() + ".NBTTagShort");
-            case 3:
-                return Class.forName(NBTViewerPlugin.getNMSPackage() + ".NBTTagInt");
-            case 4:
-                return Class.forName(NBTViewerPlugin.getNMSPackage() + ".NBTTagLong");
-            case 5:
-                return Class.forName(NBTViewerPlugin.getNMSPackage() + ".NBTTagFloat");
-            case 6:
-                return Class.forName(NBTViewerPlugin.getNMSPackage() + ".NBTTagDouble");
-            case 7:
-                return NBTTagByteArray.NMS_CLASS;
-            case 8:
-                return Class.forName(NBTViewerPlugin.getNMSPackage() + ".NBTTagString");
-            case 9:
-                return Class.forName(NBTViewerPlugin.getNMSPackage() + ".NBTTagList");
-            case 10:
-                return NBTTagCompound.NMS_CLASS;
-            case 11:
-                return Class.forName(NBTViewerPlugin.getNMSPackage() + ".NBTTagIntArray");
-    		default:
-    			return null;
-    		}
-    	} catch (ClassNotFoundException e) {
-    		e.printStackTrace();
+		
+    	switch (id) {
+    	case 0:
+    		return NBTTagEnd.NMS_CLASS;
+        case 1:
+            return NBTTagByte.NMS_CLASS;
+        case 2:
+            return NBTTagShort.NMS_CLASS;
+        case 3:
+            return NBTTagInt.NMS_CLASS;
+        case 4:
+            return NBTTagLong.NMS_CLASS;
+        case 5:
+            return NBTTagFloat.NMS_CLASS;
+        case 6:
+            return NBTTagDouble.NMS_CLASS;
+        case 7:
+            return NBTTagByteArray.NMS_CLASS;
+        case 8:
+            return NBTTagString.NMS_CLASS;
+        case 9:
+            return NBTTagList.NMS_CLASS;
+        case 10:
+            return NBTTagCompound.NMS_CLASS;
+        case 11:
+            return NBTTagIntArray.NMS_CLASS;
+    	default:
     		return null;
     	}
     }
@@ -151,60 +143,34 @@ public abstract class NBTBase {
 			return null;
 		}
     	
-    	try {
-    		final Class<?> baseNBTClass = Class.forName(NBTViewerPlugin.getNMSPackage() + ".NBTBase");
-			final Method name = baseNBTClass.getMethod("getName", new Class<?>[0]);
-			Field data;
-    	
+    	try {  	
 			if (getNBTClass((byte) 0).isInstance(o))
-				return new NBTTagEnd();
+				return new NBTTagEnd(o);
 			else if (getNBTClass((byte) 1).isInstance(o))
 				return new NBTTagByte(o);
-			else if (getNBTClass((byte) 2).isInstance(o)) {
-				data = getNBTClass((byte) 2).getField("data");
-				return new NBTTagShort((String) name.invoke(o), (Short) data.get(o));
-			} else if (getNBTClass((byte) 3).isInstance(o)) {
-				data = getNBTClass((byte) 3).getField("data");
-				return new NBTTagInt((String) name.invoke(o), (Integer) data.get(o));
-			}  else if (getNBTClass((byte) 4).isInstance(o)) {
-				data = getNBTClass((byte) 4).getField("data");
-				return new NBTTagLong((String) name.invoke(o), (Long) data.get(o));
-			}  else if (getNBTClass((byte) 5).isInstance(o)) {
-				data = getNBTClass((byte) 5).getField("data");
-				return new NBTTagFloat((String) name.invoke(o), (Float) data.get(o));
-			}  else if (getNBTClass((byte) 6).isInstance(o)) {
-				data = getNBTClass((byte) 6).getField("data");
-				return new NBTTagDouble((String) name.invoke(o), (Double) data.get(o));
-			}  else if (getNBTClass((byte) 7).isInstance(o))
+			else if (getNBTClass((byte) 2).isInstance(o))
+				return new NBTTagShort(o);
+			else if (getNBTClass((byte) 3).isInstance(o))
+				return new NBTTagInt(o);
+			else if (getNBTClass((byte) 4).isInstance(o))
+				return new NBTTagLong(o);
+			else if (getNBTClass((byte) 5).isInstance(o))
+				return new NBTTagFloat(o);
+			else if (getNBTClass((byte) 6).isInstance(o))
+				return new NBTTagDouble(o);
+			else if (getNBTClass((byte) 7).isInstance(o))
 				return new NBTTagByteArray(o);
-			else if (getNBTClass((byte) 8).isInstance(o)) {
-				data = getNBTClass((byte) 8).getField("data");
-				return new NBTTagString((String) name.invoke(o), (String) data.get(o));
-			}  else if (getNBTClass((byte) 9).isInstance(o)) {
-				final Class<?> NBTClass = getNBTClass((byte) 9);
-				int size = (Integer) NBTClass.getMethod("size", new Class<?>[0]).invoke(o);
-				final Method get = NBTClass.getMethod("get", int.class);
-				final NBTTagList tag = new NBTTagList((String) name.invoke(o));
-				
-				for (int i = 0; i < size; i++)
-					tag.add(NMSToTag(get.invoke(o, i)));
-				
-				return tag;
-			} else if (getNBTClass((byte) 10).isInstance(o))
+			else if (getNBTClass((byte) 8).isInstance(o))
+				return new NBTTagString(o);
+			else if (getNBTClass((byte) 9).isInstance(o))
+				return new NBTTagList(o);
+			else if (getNBTClass((byte) 10).isInstance(o))
 				return new NBTTagCompound(o);
-			else if (getNBTClass((byte) 11).isInstance(o)) {
-				data = getNBTClass((byte) 11).getField("data");
-				return new NBTTagIntArray((String) name.invoke(o), (int[]) data.get(o));
-			}
-			
+			else if (getNBTClass((byte) 11).isInstance(o)) 
+				return new NBTTagIntArray(o);			
     	
-    	} catch (ClassNotFoundException e) {e.printStackTrace();} 
-    	catch (NoSuchMethodException e) {e.printStackTrace();}
-    	catch (SecurityException e) {e.printStackTrace();}
-    	catch (IllegalAccessException e) {e.printStackTrace();}
+    	} catch (SecurityException e) {e.printStackTrace();}
     	catch (IllegalArgumentException e) {e.printStackTrace();}
-    	catch (InvocationTargetException e) {e.printStackTrace();}
-    	catch (NoSuchFieldException e) {e.printStackTrace();}
     	
     	return null;
     }

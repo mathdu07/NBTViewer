@@ -18,28 +18,79 @@
  */
 package fr.mathdu07.nbtviewer.nms.nbt;
 
+import java.lang.reflect.Method;
+
 import fr.mathdu07.nbtviewer.NBTViewerPlugin;
 
 public class NBTTagEnd extends NBTBase {
-
-	public NBTTagEnd() {
-		super("");
-	}
-
-	@Override
-	public byte getTypeId() {
-		return 0;
-	}
-
-	@Override
-	public NBTBase clone() {
-		return new NBTTagEnd();
-	}
 	
-	@Override
-	public String toString() {
-		return "END";
-	}
+	public static final Class<?> NMS_CLASS;
+	private static final Method getTypeId, toString, clone;
+
+    /**
+     * Creates a wrapper of NBT Tag End
+     * @param nmsTagENd - the Net Minecraft Server tag
+     */
+    public NBTTagEnd(Object nmsTagEnd) {
+        super(nmsTagEnd);
+        
+	    if (!NMS_CLASS.isInstance(nmsTag))
+	    	throw new IllegalArgumentException("Object's class must be : " + NMS_CLASS);
+    }
+
+    /**
+     * @return the type id of the tag, -1 if an exception is thrown
+     */
+    public byte getTypeId() {
+        try {
+			return (Byte) getTypeId.invoke(nmsTag);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return -1;
+		}
+    }
+
+    /**
+     * @return null if exception is an thrown
+     */
+    @Override
+    public String toString() {
+        try {
+			return (String) toString.invoke(nmsTag);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+    }
+    
+    /**
+     * @return a clone of this NBT Tag, or null if an exception is thrown
+     */
+    public NBTBase clone() {
+        try {
+			return new NBTTagEnd(clone.invoke(nmsTag));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+    }
+    
+    static {
+    	NMS_CLASS = getNMSClass();
+    	Method _getTypeId = null, _toString = null, _clone = null;
+    	
+    	try {
+    		_getTypeId = NMS_CLASS.getMethod("getTypeId");
+    		_toString = NMS_CLASS.getMethod("toString");
+    		_clone = NMS_CLASS.getMethod("clone");
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	} finally {
+    		getTypeId = _getTypeId;
+    		toString = _toString;
+    		clone = _clone;
+    	}
+    }
 	
 	public static Class<?> getNMSClass() {
     	try {
