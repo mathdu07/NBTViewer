@@ -136,7 +136,7 @@ public class NBTTagIntArray extends NBTBase {
     
     public static Class<?> getNMSClass() {
     	try {
-			return Class.forName(NBTViewerPlugin.getNMSPackage() + ".NBTTabIntArray");
+			return Class.forName(NBTViewerPlugin.getNMSPackage() + ".NBTTagIntArray");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 			return null;
