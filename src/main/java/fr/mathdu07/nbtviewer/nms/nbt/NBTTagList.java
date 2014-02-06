@@ -29,7 +29,7 @@ public class NBTTagList extends NBTBase {
 	private static final Method add, get, size;
 
     /**
-     * Creates a wrapper of NBT Tag Listr
+     * Creates a wrapper of NBT Tag List
      * @param nmsTagList - the Net Minecraft Server tag
      */
     public NBTTagList(Object nmsTagList) {

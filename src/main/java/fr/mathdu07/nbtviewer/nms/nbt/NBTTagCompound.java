@@ -118,7 +118,7 @@ public class NBTTagCompound extends NBTBase {
 
     public void set(String name, NBTBase nbtbase) {
         try {
-			set.invoke(nmsTag, name, nbtbase);
+			set.invoke(nmsTag, name, nbtbase.nmsTag);
 		} catch (Exception e) {e.printStackTrace();}
     }
 
@@ -178,7 +178,7 @@ public class NBTTagCompound extends NBTBase {
 
     public void setCompound(String name, NBTTagCompound value) {
         try {
-			setCompound.invoke(nmsTag, name, value);
+			setCompound.invoke(nmsTag, name, value.nmsTag);
 		} catch (Exception e) {e.printStackTrace();}
     }
 

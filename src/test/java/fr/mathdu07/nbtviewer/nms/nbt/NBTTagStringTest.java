@@ -14,7 +14,7 @@ public class NBTTagStringTest {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		NMSManager.init("1.6.4-R2.0");
+		NMSManager.init(NBTTestUtil.CB_VERSION_TESTING);
 		nmsTag = new net.minecraft.server.v1_6_R3.NBTTagString("", "bla bla bla");
 	}
 	

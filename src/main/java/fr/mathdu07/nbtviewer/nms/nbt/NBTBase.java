@@ -23,7 +23,7 @@ import java.lang.reflect.Method;
 import fr.mathdu07.nbtviewer.NBTViewerPlugin;
 
 /*
- * TODO Make JUnit Test Case
+ * TODO Make constructor protected 
  */
 public abstract class NBTBase {
 	
