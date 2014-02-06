@@ -27,6 +27,11 @@ public class NBTTagStringTest {
 	public void testNMSClass() {
 		assertEquals(NBTTagString.NMS_CLASS, net.minecraft.server.v1_6_R3.NBTTagString.class);
 	}
+	
+	@Test
+	public void testCreateTag() {
+		assertEquals(new NBTTagString(new net.minecraft.server.v1_6_R3.NBTTagString("", "string")), NBTTagString.createTag("string"));
+	}
 
 	@Test
 	public void testNBTTagString() {

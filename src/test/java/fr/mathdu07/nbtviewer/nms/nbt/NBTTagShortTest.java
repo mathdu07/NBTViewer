@@ -27,6 +27,11 @@ public class NBTTagShortTest {
 	public void testNMSClass() {
 		assertEquals(NBTTagShort.NMS_CLASS, net.minecraft.server.v1_6_R3.NBTTagShort.class);
 	}
+	
+	@Test
+	public void testCreateTag() {
+		assertEquals(new NBTTagShort(new net.minecraft.server.v1_6_R3.NBTTagShort("", (short) 9)), NBTTagShort.createTag((short) 9));
+	}
 
 	@Test
 	public void testNBTTagShort() {

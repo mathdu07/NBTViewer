@@ -31,7 +31,7 @@ public class NBTTagEnd extends NBTBase {
      * Creates a wrapper of NBT Tag End
      * @param nmsTagENd - the Net Minecraft Server tag
      */
-    public NBTTagEnd(Object nmsTagEnd) {
+    protected NBTTagEnd(Object nmsTagEnd) {
         super(nmsTagEnd);
         
 	    if (!NMS_CLASS.isInstance(nmsTag))
@@ -90,6 +90,19 @@ public class NBTTagEnd extends NBTBase {
     		toString = _toString;
     		clone = _clone;
     	}
+    }
+    
+    /**
+     * @param value
+     * @return created tag, or null if an exception is thrown
+     */
+    public static NBTTagEnd createTag() {
+    	try {
+			return new NBTTagEnd(NMS_CLASS.getConstructor().newInstance());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
     }
 	
 	public static Class<?> getNMSClass() {

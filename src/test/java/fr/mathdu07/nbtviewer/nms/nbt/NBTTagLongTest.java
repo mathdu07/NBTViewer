@@ -27,6 +27,11 @@ public class NBTTagLongTest {
 	public void testNMSClass() {
 		assertEquals(NBTTagLong.NMS_CLASS, net.minecraft.server.v1_6_R3.NBTTagLong.class);
 	}
+	
+	@Test
+	public void testCreateTag() {
+		assertEquals(new NBTTagLong(new net.minecraft.server.v1_6_R3.NBTTagLong("", 25793l)), NBTTagLong.createTag(25793l));
+	}
 
 	@Test
 	public void testNBTTagLong() {

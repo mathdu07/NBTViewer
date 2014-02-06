@@ -29,6 +29,11 @@ public class NBTTagIntArrayTest {
 	public void testNMSClass() {
 		assertEquals(NBTTagIntArray.NMS_CLASS, net.minecraft.server.v1_6_R3.NBTTagIntArray.class);
 	}
+	
+	@Test
+	public void testCreateTag() {
+		assertEquals(new NBTTagIntArray(new net.minecraft.server.v1_6_R3.NBTTagIntArray("", new int[] {1})), NBTTagIntArray.createTag(new int[] {1}));
+	}
 
 	@Test
 	public void testNBTTagIntArray() {

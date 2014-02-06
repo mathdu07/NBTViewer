@@ -27,6 +27,11 @@ public class NBTTagIntTest {
 	public void testNMSClass() {
 		assertEquals(NBTTagInt.NMS_CLASS, net.minecraft.server.v1_6_R3.NBTTagInt.class);
 	}
+	
+	@Test
+	public void testCreateTag() {
+		assertEquals(new NBTTagInt(new net.minecraft.server.v1_6_R3.NBTTagInt("", 985)), NBTTagInt.createTag(985));
+	}
 
 	@Test
 	public void testNBTTagInt() {

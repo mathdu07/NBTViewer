@@ -32,7 +32,7 @@ public class NBTTagList extends NBTBase {
      * Creates a wrapper of NBT Tag List
      * @param nmsTagList - the Net Minecraft Server tag
      */
-    public NBTTagList(Object nmsTagList) {
+    protected NBTTagList(Object nmsTagList) {
         super(nmsTagList);
         
 	    if (!NMS_CLASS.isInstance(nmsTag))
@@ -163,6 +163,20 @@ public class NBTTagList extends NBTBase {
     		size = _size;
     	}
     }
+    
+    /**
+     * @param value
+     * @return created tag, or null if an exception is thrown
+     */
+    public static NBTTagList createTag() {
+    	try {
+			return new NBTTagList(NMS_CLASS.getConstructor().newInstance());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+    }
+    
     public static Class<?> getNMSClass() {
     	try {
 			return Class.forName(NBTViewerPlugin.getNMSPackage() + ".NBTTagList");

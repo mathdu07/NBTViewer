@@ -37,7 +37,7 @@ public class NBTTagCompound extends NBTBase {
      * Creates a wrapper of NBT Tag Compound
      * @param nmsTagCompound - the Net Minecraft Server tag
      */
-    public NBTTagCompound(Object nmsTagCompound) {
+    protected NBTTagCompound(Object nmsTagCompound) {
         super(nmsTagCompound);
         
 	    if (!NMS_CLASS.isInstance(nmsTag))
@@ -417,6 +417,19 @@ public class NBTTagCompound extends NBTBase {
     		getBoolean = _getBoolean;
     		getList = _getList;
     	}
+    }
+    
+    /**
+     * @param value
+     * @return created tag, or null if an exception is thrown
+     */
+    public static NBTTagCompound createTag() {
+    	try {
+			return new NBTTagCompound(NMS_CLASS.getConstructor().newInstance());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
     }
     
     public static Class<?> getNMSClass() {

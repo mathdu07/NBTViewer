@@ -33,7 +33,7 @@ public class NBTTagInt extends NBTBase {
      * Creates a wrapper of NBT Tag Integer
      * @param nmsTagInt - the Net Minecraft Server tag
      */
-    public NBTTagInt(Object nmsTagInt) {
+    protected NBTTagInt(Object nmsTagInt) {
         super(nmsTagInt);
         
 	    if (!NMS_CLASS.isInstance(nmsTag))
@@ -132,6 +132,19 @@ public class NBTTagInt extends NBTBase {
     		hashCode = _hashCode;
     		data = _data;
     	}
+    }
+    
+    /**
+     * @param value
+     * @return created tag, or null if an exception is thrown
+     */
+    public static NBTTagInt createTag(int value) {
+    	try {
+			return new NBTTagInt(NMS_CLASS.getConstructor(String.class, int.class).newInstance("", value));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
     }
     
     public static Class<?> getNMSClass() {

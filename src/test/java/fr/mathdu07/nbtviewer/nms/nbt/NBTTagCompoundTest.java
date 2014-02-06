@@ -72,6 +72,11 @@ public class NBTTagCompoundTest {
 	public void testNMSClass() {
 		assertEquals(NBTTagCompound.NMS_CLASS, net.minecraft.server.v1_6_R3.NBTTagCompound.class);
 	}
+	
+	@Test
+	public void testCreateTag() {
+		assertEquals(new NBTTagCompound(new net.minecraft.server.v1_6_R3.NBTTagCompound()), NBTTagCompound.createTag());
+	}
 
 	@Test
 	public void testNBTTagCompound() {

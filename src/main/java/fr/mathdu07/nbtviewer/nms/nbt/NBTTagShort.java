@@ -33,7 +33,7 @@ public class NBTTagShort extends NBTBase {
      * Creates a wrapper of NBT Tag Short
      * @param nmsTagShort - the Net Minecraft Server tag
      */
-    public NBTTagShort(Object nmsTagShort) {
+    protected NBTTagShort(Object nmsTagShort) {
         super(nmsTagShort);
         
 	    if (!NMS_CLASS.isInstance(nmsTag))
@@ -132,6 +132,19 @@ public class NBTTagShort extends NBTBase {
     		hashCode = _hashCode;
     		data = _data;
     	}
+    }
+    
+    /**
+     * @param value
+     * @return created tag, or null if an exception is thrown
+     */
+    public static NBTTagShort createTag(short value) {
+    	try {
+			return new NBTTagShort(NMS_CLASS.getConstructor(String.class, short.class).newInstance("", value));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
     }
     
     public static Class<?> getNMSClass() {

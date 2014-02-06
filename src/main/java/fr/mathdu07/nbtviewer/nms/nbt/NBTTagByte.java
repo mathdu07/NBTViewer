@@ -19,6 +19,7 @@
 package fr.mathdu07.nbtviewer.nms.nbt;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import fr.mathdu07.nbtviewer.NBTViewerPlugin;
@@ -33,7 +34,7 @@ public class NBTTagByte extends NBTBase {
      * Creates a wrapper of NBT Tag Byte
      * @param nmsTagByte - the Net Minecraft Server tag
      */
-    public NBTTagByte(Object nmsTagByte) {
+    protected NBTTagByte(Object nmsTagByte) {
         super(nmsTagByte);
         
 	    if (!NMS_CLASS.isInstance(nmsTagByte))
@@ -132,6 +133,19 @@ public class NBTTagByte extends NBTBase {
     		hashCode = _hashCode;
     		data = _data;
     	}
+    }
+    
+    /**
+     * @param value
+     * @return created tag, or null if an exception is thrown
+     */
+    public static NBTTagByte createTag(byte value) {
+    	try {
+			return new NBTTagByte(NMS_CLASS.getConstructor(String.class, byte.class).newInstance("", value));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
     }
     
     public static Class<?> getNMSClass() {

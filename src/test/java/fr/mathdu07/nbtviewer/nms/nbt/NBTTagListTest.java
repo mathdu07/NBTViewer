@@ -40,6 +40,11 @@ public class NBTTagListTest {
 	public void testNMSClass() {
 		assertEquals(NBTTagList.NMS_CLASS, net.minecraft.server.v1_6_R3.NBTTagList.class);
 	}
+	
+	@Test
+	public void testCreateTag() {
+		assertEquals(new NBTTagList(new net.minecraft.server.v1_6_R3.NBTTagList()), NBTTagList.createTag());
+	}
 
 	@Test
 	public void testNBTTagList() {

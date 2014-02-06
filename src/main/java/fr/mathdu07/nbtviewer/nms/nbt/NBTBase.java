@@ -22,9 +22,6 @@ import java.lang.reflect.Method;
 
 import fr.mathdu07.nbtviewer.NBTViewerPlugin;
 
-/*
- * TODO Make constructor protected 
- */
 public abstract class NBTBase {
 	
 	public static final Class<?> NMS_CLASS;

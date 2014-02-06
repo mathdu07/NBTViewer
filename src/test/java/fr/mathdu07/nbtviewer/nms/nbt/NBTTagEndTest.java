@@ -27,6 +27,11 @@ public class NBTTagEndTest {
 	public void testNMSClass() {
 		assertEquals(NBTTagEnd.NMS_CLASS, net.minecraft.server.v1_6_R3.NBTTagEnd.class);
 	}
+	
+	@Test
+	public void testCreateTag() {
+		assertEquals(new NBTTagEnd(new net.minecraft.server.v1_6_R3.NBTTagEnd()), NBTTagEnd.createTag());
+	}
 
 	@Test
 	public void testNBTTagEnd() {

@@ -27,6 +27,11 @@ public class NBTTagDoubleTest {
 	public void testNMSClass() {
 		assertEquals(NBTTagDouble.NMS_CLASS, net.minecraft.server.v1_6_R3.NBTTagDouble.class);
 	}
+	
+	@Test
+	public void testCreateTag() {
+		assertEquals(new NBTTagDouble(new net.minecraft.server.v1_6_R3.NBTTagDouble("", 4.5)), NBTTagDouble.createTag(4.5));
+	}
 
 	@Test
 	public void testNBTTagDouble() {

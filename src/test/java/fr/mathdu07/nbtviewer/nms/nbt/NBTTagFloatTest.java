@@ -27,6 +27,11 @@ public class NBTTagFloatTest {
 	public void testNMSClass() {
 		assertEquals(NBTTagFloat.NMS_CLASS, net.minecraft.server.v1_6_R3.NBTTagFloat.class);
 	}
+	
+	@Test
+	public void testCreateTag() {
+		assertEquals(new NBTTagFloat(new net.minecraft.server.v1_6_R3.NBTTagFloat("", 0.5f)), NBTTagFloat.createTag(0.5f));
+	}
 
 	@Test
 	public void testNBTTagFloat() {
