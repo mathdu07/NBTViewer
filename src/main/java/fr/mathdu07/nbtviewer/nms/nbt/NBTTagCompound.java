@@ -19,7 +19,9 @@
 package fr.mathdu07.nbtviewer.nms.nbt;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 
 import fr.mathdu07.nbtviewer.NBTViewerPlugin;
 
@@ -51,7 +53,13 @@ public class NBTTagCompound extends NBTBase {
     @Deprecated
     public Collection<NBTBase> getValues() {
         try {
-			return (Collection<NBTBase>) getValues.invoke(nmsTag);
+        	final Iterator<net.minecraft.server.v1_6_R3.NBTBase> values = ((Collection<net.minecraft.server.v1_6_R3.NBTBase>) getValues.invoke(nmsTag)).iterator();
+			final Collection<NBTBase> nbtValues = new ArrayList<NBTBase>();
+			
+			while (values.hasNext())
+				nbtValues.add(NBTBase.NMSToTag(values.next()));
+			
+        	return nbtValues;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

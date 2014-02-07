@@ -19,6 +19,7 @@
 package fr.mathdu07.nbtviewer.nms.nbt;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
 import fr.mathdu07.nbtviewer.NBTViewerPlugin;
 
@@ -221,6 +222,33 @@ public abstract class NBTBase {
 			e.printStackTrace();
 			return null;
 		}
+    }
+    
+    public static String TagToString(NBTBase tag) {
+    	if (tag instanceof NBTTagByte)
+    		return tag.getName() + ": " + ((NBTTagByte)tag).getData();
+    	else if (tag instanceof NBTTagByteArray)
+    		return tag.getName() + ": " + Arrays.toString(((NBTTagByteArray)tag).getData());
+    	else if (tag instanceof NBTTagCompound)
+    		return tag.getName() + ": ";
+    	else if (tag instanceof NBTTagDouble)
+    		return tag.getName() + ": " + ((NBTTagDouble)tag).getData();
+    	else if (tag instanceof NBTTagFloat)
+    		return tag.getName() + ": " + ((NBTTagFloat)tag).getData();
+    	else if (tag instanceof NBTTagInt)
+    		return tag.getName() + ": " + ((NBTTagInt)tag).getData();
+    	else if (tag instanceof NBTTagIntArray)
+    		return tag.getName() + ": " + Arrays.toString(((NBTTagIntArray)tag).getData());
+    	else if (tag instanceof NBTTagList) 
+    		return tag.getName() + ": ";
+    	else if (tag instanceof NBTTagLong)
+    		return tag.getName() + ": " + ((NBTTagLong)tag).getData();
+    	else if (tag instanceof NBTTagShort)
+    		return tag.getName() + ": " + ((NBTTagShort)tag).getData();
+    	else if (tag instanceof NBTTagString)
+    		return tag.getName() + ": \"" + ((NBTTagString)tag).getData() + "\"";
+    	else
+    		return tag.getName() + ": ?";
     }
 
 }

@@ -44,6 +44,7 @@ public class NBTViewerPlugin extends JavaPlugin {
 		logger = getLogger();
 		
 		info("Bukkit version : " + getServer().getBukkitVersion());
+		NMSManager.init(getServer().getBukkitVersion());
 		String packageNMS = NMSManager.getNMSPackage();
 		String packageCB = NMSManager.getCBPackage();
 		
@@ -100,12 +101,12 @@ public class NBTViewerPlugin extends JavaPlugin {
 		for (int i = 0; i < level; i++)
 			spacer += "  ";
 		
-		list.add(spacer + (tag.getName() == "" ? "*"  : tag.toString()));
+		list.add(spacer + (tag.getName() == "" ? "*"  : NBTBase.TagToString(tag)));
 		
 		spacer += "  ";
 		
 		for (NBTBase base : tag.getValues()) {
-			list.add(spacer + base.toString());
+			list.add(spacer + NBTBase.TagToString(base));
 			
 			if (base instanceof NBTTagCompound) {
 				final String[] tags = developNBTTree((NBTTagCompound) base, level + 1);
@@ -125,7 +126,7 @@ public class NBTViewerPlugin extends JavaPlugin {
 						for (String s : tags)
 							list.add(spacer + s);
 					} else
-						list.add(spacer + "  " + child);
+						list.add(spacer + "  " + NBTBase.TagToString(child));
 				}
 					
 			}
