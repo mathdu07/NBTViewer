@@ -18,52 +18,138 @@
  */
 package fr.mathdu07.nbtviewer.nms.nbt;
 
-import java.util.Arrays;
-
-import org.bukkit.ChatColor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 import fr.mathdu07.nbtviewer.NBTViewerPlugin;
 
 public class NBTTagByteArray extends NBTBase {
+	
+	public static final Class<?> NMS_CLASS;
+	private static final Method getTypeId, toString, clone, equals, hashCode;
+	private static final Field data;
 
-	public final byte[] data;
-
-	public NBTTagByteArray(String name) {
-	    super(name);
-	    this.data = new byte[0];
+    /**
+     * Creates a wrapper of NBT Tag ByteArray
+     * @param nmsTagByteArray - the Net Minecraft Server tag
+     */
+	protected NBTTagByteArray(Object nmsTagByteArray) {
+	    super(nmsTagByteArray);
+	    
+	    if (!NMS_CLASS.isInstance(nmsTagByteArray))
+	    	throw new IllegalArgumentException("Object's class must be : " + NMS_CLASS);
 	}
 
-	public NBTTagByteArray(String name, byte[] data) {
-	    super(name);
-	    this.data = data;
-	}
+	 /**
+     * @return the tag's data
+     */
+    public byte[] getData() {
+    	try {
+			return (byte[]) data.get(nmsTag);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+    }
+    
+    /**
+     * @return the type id of the tag, -1 if an exception is thrown
+     */
+    public byte getTypeId() {
+        try {
+			return (Byte) getTypeId.invoke(nmsTag);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return -1;
+		}
+    }
 
-	public byte getTypeId() {
-	    return (byte) 7;
-	}
+    /**
+     * @return null if exception is an thrown
+     */
+    @Override
+    public String toString() {
+        try {
+			return (String) toString.invoke(nmsTag);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+    }
+    
+    /**
+     * @return a clone of this NBT Tag, or null if an exception is thrown
+     */
+    public NBTBase clone() {
+        try {
+			return new NBTTagByteArray(clone.invoke(nmsTag));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+    }
 
-	public String toString() {
-	    return name + ": " + ChatColor.DARK_RED + Arrays.toString(data);
-	}
+    public boolean equals(Object object) {
+    	if (object instanceof NBTTagByteArray) {
+			try {
+				return (Boolean) equals.invoke(nmsTag, ((NBTTagByteArray)object).nmsTag);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return false;
+			}
+    	} else
+    		return false;
+    }
 
-	public NBTBase clone() {
-	    byte[] abyte = new byte[this.data.length];
-
-	     System.arraycopy(this.data, 0, abyte, 0, this.data.length);
-	    return new NBTTagByteArray(this.getName(), abyte);
-	}
-
-	public boolean equals(Object object) {
-	    return super.equals(object) ? Arrays.equals(this.data, ((NBTTagByteArray) object).data) : false;
-	}
-
-	public int hashCode() {
-	    return super.hashCode() ^ Arrays.hashCode(this.data);
-	}
+    public int hashCode() {
+        try {
+			return (Integer) hashCode.invoke(nmsTag);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return -1;
+		}
+    }
+	
+    static {
+    	NMS_CLASS = getNMSClass();
+    	Method _getTypeId = null, _toString = null, _clone = null, _equals = null, _hashCode = null;
+    	Field _data = null;
+    	
+    	try {
+    		_getTypeId = NMS_CLASS.getMethod("getTypeId");
+    		_toString = NMS_CLASS.getMethod("toString");
+    		_clone = NMS_CLASS.getMethod("clone");
+    		_equals = NMS_CLASS.getMethod("equals", Object.class);
+    		_hashCode = NMS_CLASS.getMethod("hashCode");
+    		_data = NMS_CLASS.getField("data");
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	} finally {
+    		getTypeId = _getTypeId;
+    		toString = _toString;
+    		clone = _clone;
+    		equals = _equals;
+    		hashCode = _hashCode;
+    		data = _data;
+    	}
+    }
+    
+    /**
+     * @param value
+     * @return created tag, or null if an exception is thrown
+     */
+    public static NBTTagByteArray createTag(byte[] value) {
+    	try {
+			return new NBTTagByteArray(NMS_CLASS.getConstructor(String.class, byte[].class).newInstance("", value));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+    }
 	
     public static Class<?> getNMSClass() {
     	try {
-			return Class.forName(NBTViewerPlugin.getNMSPackage() + ".NBTTabByteArray");
+			return Class.forName(NBTViewerPlugin.getNMSPackage() + ".NBTTagByteArray");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 			return null;

@@ -19,9 +19,7 @@
 package fr.mathdu07.nbtviewer;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -30,6 +28,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import fr.mathdu07.nbtviewer.command.NBTCommandExecutor;
 import fr.mathdu07.nbtviewer.nms.NBTItemStack;
+import fr.mathdu07.nbtviewer.nms.NMSManager;
 import fr.mathdu07.nbtviewer.nms.nbt.NBTBase;
 import fr.mathdu07.nbtviewer.nms.nbt.NBTTagCompound;
 import fr.mathdu07.nbtviewer.nms.nbt.NBTTagList;
@@ -39,19 +38,15 @@ public class NBTViewerPlugin extends JavaPlugin {
 	
 	private NBTCommandExecutor executor;
 	private static Logger logger;
-	
-	private static final Map<String, String> mapPackageNMS = new HashMap<String, String>();
-	private static final Map<String, String> mapPackageCB = new HashMap<String, String>();
-	private static String packageNMS;
-	private static String packageCB;
 
 	@Override
 	public void onLoad() {		
 		logger = getLogger();
 		
 		info("Bukkit version : " + getServer().getBukkitVersion());
-		packageNMS = mapPackageNMS.get(getServer().getBukkitVersion());
-		packageCB = mapPackageCB.get(getServer().getBukkitVersion());
+		NMSManager.init(getServer().getBukkitVersion());
+		String packageNMS = NMSManager.getNMSPackage();
+		String packageCB = NMSManager.getCBPackage();
 		
 		if (packageNMS == null || packageCB == null) {
 			severe("Unsupported version : " + getServer().getBukkitVersion());
@@ -106,12 +101,12 @@ public class NBTViewerPlugin extends JavaPlugin {
 		for (int i = 0; i < level; i++)
 			spacer += "  ";
 		
-		list.add(spacer + (tag.getName() == "" ? "*"  : tag.toString()));
+		list.add(spacer + (tag.getName() == "" ? "*"  : NBTBase.TagToString(tag)));
 		
 		spacer += "  ";
 		
 		for (NBTBase base : tag.getValues()) {
-			list.add(spacer + base.toString());
+			list.add(spacer + NBTBase.TagToString(base));
 			
 			if (base instanceof NBTTagCompound) {
 				final String[] tags = developNBTTree((NBTTagCompound) base, level + 1);
@@ -131,7 +126,7 @@ public class NBTViewerPlugin extends JavaPlugin {
 						for (String s : tags)
 							list.add(spacer + s);
 					} else
-						list.add(spacer + "  " + child);
+						list.add(spacer + "  " + NBTBase.TagToString(child));
 				}
 					
 			}
@@ -157,27 +152,21 @@ public class NBTViewerPlugin extends JavaPlugin {
 	}
 	
 	/**
+	 * @deprecated Use {@link NMSManager#getNMSPackage()} instead
 	 * @return the net minecraft server package for this version
 	 */
+	@Deprecated
 	public static String getNMSPackage() {
-		return packageNMS;
+		return NMSManager.getNMSPackage();
 	}
 	
 	/**
+	 * @deprecated Use {@link NMSManager#getCBPackage()} instead
 	 * @return the net minecraft server package for this version
 	 */
+	@Deprecated
 	public static String getCBPackage() {
-		return packageCB;
-	}
-	
-	static {
-		mapPackageNMS.put("1.6.4-R2.0", "net.minecraft.server.v1_6_R3");
-		mapPackageNMS.put("1.6.4-R1.0", "net.minecraft.server.v1_6_R3");
-		mapPackageNMS.put("1.6.2-R1.0", "net.minecraft.server.v1_6_R2");
-		
-		mapPackageCB.put("1.6.4-R2.0", "org.bukkit.craftbukkit.v1_6_R3");
-		mapPackageCB.put("1.6.4-R1.0", "org.bukkit.craftbukkit.v1_6_R3");
-		mapPackageCB.put("1.6.2-R1.0", "org.bukkit.craftbukkit.v1_6_R2");
+		return NMSManager.getCBPackage();
 	}
 
 }

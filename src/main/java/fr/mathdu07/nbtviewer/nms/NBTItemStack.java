@@ -55,7 +55,7 @@ public class NBTItemStack extends NBTObject {
 
 	public static NBTItemStack getNBTItemStack(ItemStack is) {
 		try {
-			Class<?> craftItemClass = Class.forName(NBTViewerPlugin.getCBPackage() + ".inventory.CraftItemStack");
+			Class<?> craftItemClass = Class.forName(NMSManager.getCBPackage() + ".inventory.CraftItemStack");
 			Method m = craftItemClass.getDeclaredMethod("asNMSCopy", new Class<?>[] {ItemStack.class});
 			return new NBTItemStack(m.invoke(craftItemClass.cast(is), is));
 		}

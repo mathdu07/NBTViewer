@@ -18,75 +18,163 @@
  */
 package fr.mathdu07.nbtviewer.nms.nbt;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.lang.reflect.Method;
 
 import fr.mathdu07.nbtviewer.NBTViewerPlugin;
 
 public class NBTTagList extends NBTBase {
-    private final List<NBTBase> list = new ArrayList<NBTBase>();
-    private byte type;
+	
+	public static final Class<?> NMS_CLASS;
+	private static final Method getTypeId, toString, clone, equals, hashCode;
+	private static final Method add, get, size;
 
-    public NBTTagList() {
-        super("");
+    /**
+     * Creates a wrapper of NBT Tag List
+     * @param nmsTagList - the Net Minecraft Server tag
+     */
+    protected NBTTagList(Object nmsTagList) {
+        super(nmsTagList);
+        
+	    if (!NMS_CLASS.isInstance(nmsTag))
+	    	throw new IllegalArgumentException("Object's class must be : " + NMS_CLASS);
     }
-
-    public NBTTagList(String s) {
-        super(s);
-    }
-
+    
+    /**
+     * @return the type id of the tag, -1 if an exception is thrown
+     */
     public byte getTypeId() {
-        return (byte) 9;
+        try {
+			return (Byte) getTypeId.invoke(nmsTag);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return -1;
+		}
     }
 
+    /**
+     * @return null if exception is an thrown
+     */
+    @Override
     public String toString() {
-        return name + ":";
+        try {
+			return (String) toString.invoke(nmsTag);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
     }
-
-    public void add(NBTBase nbtbase) {
-        this.type = nbtbase.getTypeId();
-        this.list.add(nbtbase);
+    
+    /**
+     * Add an NBT Tag to this Tag List
+     * @param base - the tag to add
+     */
+    public void add(NBTBase base) {
+    	try {
+    		add.invoke(nmsTag, base.nmsTag);
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
     }
-
-    public NBTBase get(int i) {
-        return (NBTBase) this.list.get(i);
+    
+    /**
+     * @param index
+     * @return the NBT tag at the given index, or null if an exception is thrown
+     */
+    public NBTBase get(int index) {
+    	try {
+    		return NBTBase.NMSToTag(get.invoke(nmsTag, index));
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    		return null;
+    	}
     }
-
+    
+    /**
+     * @return the tag list's size, or -1 if an exception is thrown
+     */
     public int size() {
-        return this.list.size();
+    	try {
+    		return (Integer) size.invoke(nmsTag);
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    		return -1;
+    	}
     }
-
+    
+    /**
+     * @return a clone of this NBT Tag, or null if an exception is thrown
+     */
     public NBTBase clone() {
-        NBTTagList nbttaglist = new NBTTagList(this.getName());
-
-        nbttaglist.type = this.type;
-        Iterator<NBTBase> iterator = this.list.iterator();
-
-        while (iterator.hasNext()) {
-            NBTBase nbtbase = (NBTBase) iterator.next();
-            NBTBase nbtbase1 = nbtbase.clone();
-
-            nbttaglist.list.add(nbtbase1);
-        }
-
-        return nbttaglist;
+        try {
+			return new NBTTagList(clone.invoke(nmsTag));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
     }
 
     public boolean equals(Object object) {
-        if (super.equals(object)) {
-            NBTTagList nbttaglist = (NBTTagList) object;
-
-            if (this.type == nbttaglist.type) {
-                return this.list.equals(nbttaglist.list);
-            }
-        }
-
-        return false;
+    	if (object instanceof NBTTagList) {
+			try {
+				return (Boolean) equals.invoke(nmsTag, ((NBTTagList)object).nmsTag);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return false;
+			}
+    	} else
+    		return false;
     }
 
     public int hashCode() {
-        return super.hashCode() ^ this.list.hashCode();
+        try {
+			return (Integer) hashCode.invoke(nmsTag);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return -1;
+		}
+    }
+    
+    static {
+    	NMS_CLASS = getNMSClass();
+    	Method _getTypeId = null, _toString = null, _clone = null, _equals = null, _hashCode = null;
+    	Method _add = null, _get = null, _size = null;
+    	
+    	try {
+    		_getTypeId = NMS_CLASS.getMethod("getTypeId");
+    		_toString = NMS_CLASS.getMethod("toString");
+    		_clone = NMS_CLASS.getMethod("clone");
+    		_equals = NMS_CLASS.getMethod("equals", Object.class);
+    		_hashCode = NMS_CLASS.getMethod("hashCode");
+    		
+    		_add = NMS_CLASS.getMethod("add", NBTBase.NMS_CLASS);
+    		_get = NMS_CLASS.getMethod("get", int.class);
+    		_size = NMS_CLASS.getMethod("size");
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	} finally {
+    		getTypeId = _getTypeId;
+    		toString = _toString;
+    		clone = _clone;
+    		equals = _equals;
+    		hashCode = _hashCode;
+    		
+    		add = _add;
+    		get = _get;
+    		size = _size;
+    	}
+    }
+    
+    /**
+     * @param value
+     * @return created tag, or null if an exception is thrown
+     */
+    public static NBTTagList createTag() {
+    	try {
+			return new NBTTagList(NMS_CLASS.getConstructor().newInstance());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
     }
     
     public static Class<?> getNMSClass() {
