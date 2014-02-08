@@ -24,7 +24,6 @@ import java.lang.reflect.Method;
 
 import org.bukkit.inventory.ItemStack;
 
-import fr.mathdu07.nbtviewer.NBTViewerPlugin;
 import fr.mathdu07.nbtviewer.nms.nbt.NBTBase;
 import fr.mathdu07.nbtviewer.nms.nbt.NBTTagCompound;
 
@@ -72,7 +71,7 @@ public class NBTItemStack extends NBTObject {
 	static {
 		Class<?> itemClass = null;
 		try {
-			itemClass = Class.forName(NBTViewerPlugin.getNMSPackage() + ".ItemStack");
+			itemClass = Class.forName(NMSManager.getNMSPackage() + ".ItemStack");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} finally {

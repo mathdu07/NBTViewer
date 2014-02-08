@@ -20,7 +20,7 @@ package fr.mathdu07.nbtviewer.nms.nbt;
 
 import java.lang.reflect.Method;
 
-import fr.mathdu07.nbtviewer.NBTViewerPlugin;
+import fr.mathdu07.nbtviewer.nms.NMSManager;
 
 public class NBTTagList extends NBTBase {
 	
@@ -179,7 +179,7 @@ public class NBTTagList extends NBTBase {
     
     public static Class<?> getNMSClass() {
     	try {
-			return Class.forName(NBTViewerPlugin.getNMSPackage() + ".NBTTagList");
+			return Class.forName(NMSManager.getNMSPackage() + ".NBTTagList");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 			return null;

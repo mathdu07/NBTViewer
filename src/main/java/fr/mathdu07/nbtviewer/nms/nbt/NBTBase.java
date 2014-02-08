@@ -21,7 +21,7 @@ package fr.mathdu07.nbtviewer.nms.nbt;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
-import fr.mathdu07.nbtviewer.NBTViewerPlugin;
+import fr.mathdu07.nbtviewer.nms.NMSManager;
 
 public abstract class NBTBase {
 	
@@ -134,7 +134,7 @@ public abstract class NBTBase {
      */
     public static NBTBase NMSToTag(Object o) {
     	try {
-			if (!Class.forName(NBTViewerPlugin.getNMSPackage() + ".NBTBase").isInstance(o))
+			if (!Class.forName(NMSManager.getNMSPackage() + ".NBTBase").isInstance(o))
 				throw new IllegalArgumentException("Object o must inherit from NMS NBTBase");
 		} catch (ClassNotFoundException e1) {
 			e1.printStackTrace();
@@ -217,7 +217,7 @@ public abstract class NBTBase {
     
     private static Class<?> getNMSClass() {
     	try {
-			return Class.forName(NBTViewerPlugin.getNMSPackage() + ".NBTBase");
+			return Class.forName(NMSManager.getNMSPackage() + ".NBTBase");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 			return null;

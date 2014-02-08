@@ -166,23 +166,5 @@ public class NBTViewerPlugin extends JavaPlugin {
 	public static void severe(String msg) {
 		log(msg, Level.SEVERE);
 	}
-	
-	/**
-	 * @deprecated Use {@link NMSManager#getNMSPackage()} instead
-	 * @return the net minecraft server package for this version
-	 */
-	@Deprecated
-	public static String getNMSPackage() {
-		return NMSManager.getNMSPackage();
-	}
-	
-	/**
-	 * @deprecated Use {@link NMSManager#getCBPackage()} instead
-	 * @return the net minecraft server package for this version
-	 */
-	@Deprecated
-	public static String getCBPackage() {
-		return NMSManager.getCBPackage();
-	}
 
 }

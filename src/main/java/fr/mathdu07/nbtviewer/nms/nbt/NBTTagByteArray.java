@@ -21,7 +21,7 @@ package fr.mathdu07.nbtviewer.nms.nbt;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-import fr.mathdu07.nbtviewer.NBTViewerPlugin;
+import fr.mathdu07.nbtviewer.nms.NMSManager;
 
 public class NBTTagByteArray extends NBTBase {
 	
@@ -149,7 +149,7 @@ public class NBTTagByteArray extends NBTBase {
 	
     public static Class<?> getNMSClass() {
     	try {
-			return Class.forName(NBTViewerPlugin.getNMSPackage() + ".NBTTagByteArray");
+			return Class.forName(NMSManager.getNMSPackage() + ".NBTTagByteArray");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 			return null;

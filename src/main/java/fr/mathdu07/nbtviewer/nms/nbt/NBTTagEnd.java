@@ -20,7 +20,7 @@ package fr.mathdu07.nbtviewer.nms.nbt;
 
 import java.lang.reflect.Method;
 
-import fr.mathdu07.nbtviewer.NBTViewerPlugin;
+import fr.mathdu07.nbtviewer.nms.NMSManager;
 
 public class NBTTagEnd extends NBTBase {
 	
@@ -107,7 +107,7 @@ public class NBTTagEnd extends NBTBase {
 	
 	public static Class<?> getNMSClass() {
     	try {
-			return Class.forName(NBTViewerPlugin.getNMSPackage() + ".NBTTagEnd");
+			return Class.forName(NMSManager.getNMSPackage() + ".NBTTagEnd");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 			return null;

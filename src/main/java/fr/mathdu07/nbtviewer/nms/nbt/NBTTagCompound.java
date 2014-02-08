@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-import fr.mathdu07.nbtviewer.NBTViewerPlugin;
+import fr.mathdu07.nbtviewer.nms.NMSManager;
 
 public class NBTTagCompound extends NBTBase {
 
@@ -442,7 +442,7 @@ public class NBTTagCompound extends NBTBase {
     
     public static Class<?> getNMSClass() {
     	try {
-			return Class.forName(NBTViewerPlugin.getNMSPackage() + ".NBTTagCompound");
+			return Class.forName(NMSManager.getNMSPackage() + ".NBTTagCompound");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 			return null;
