@@ -18,6 +18,7 @@
  */
 package fr.mathdu07.nbtviewer;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -27,6 +28,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import fr.mathdu07.nbtviewer.command.NBTCommandExecutor;
+import fr.mathdu07.nbtviewer.config.Config;
 import fr.mathdu07.nbtviewer.nms.NBTItemStack;
 import fr.mathdu07.nbtviewer.nms.NMSManager;
 import fr.mathdu07.nbtviewer.nms.nbt.NBTBase;
@@ -38,10 +40,18 @@ public class NBTViewerPlugin extends JavaPlugin {
 	
 	private NBTCommandExecutor executor;
 	private static Logger logger;
+	private static Config config;
 
 	@Override
 	public void onLoad() {		
 		logger = getLogger();
+		
+		if (config == null) {
+			config = new Config(true, new File(getDataFolder(), "config.yml"));
+			config.load();
+			config.save();
+		} else
+			config.reload();
 		
 		info("Bukkit version : " + getServer().getBukkitVersion());
 		NMSManager.init(getServer().getBukkitVersion());
@@ -58,13 +68,19 @@ public class NBTViewerPlugin extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		if (!config.getBoolean(Config.ENABLED)) {
+			warn("Plugin disabled by the config");
+			this.setEnabled(false);
+			return;
+		}
+		
 		this.executor = new NBTCommandExecutor();
 		this.getServer().getPluginCommand("nbtitem").setExecutor(executor);
 	}
 
 	@Override
 	public void onDisable() {
-
+		
 	}
 	
 	/**
