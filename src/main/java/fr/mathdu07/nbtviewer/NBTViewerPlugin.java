@@ -29,12 +29,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import fr.mathdu07.nbtviewer.command.NBTCommandExecutor;
 import fr.mathdu07.nbtviewer.config.Config;
-import fr.mathdu07.nbtviewer.nms.NBTItemStack;
+import fr.mathdu07.nbtviewer.listener.NBTPlayerListener;
+import fr.mathdu07.nbtviewer.nms.NBTObject;
 import fr.mathdu07.nbtviewer.nms.NMSManager;
 import fr.mathdu07.nbtviewer.nms.nbt.NBTBase;
 import fr.mathdu07.nbtviewer.nms.nbt.NBTTagCompound;
 import fr.mathdu07.nbtviewer.nms.nbt.NBTTagList;
-
 
 public class NBTViewerPlugin extends JavaPlugin {
 	
@@ -74,8 +74,11 @@ public class NBTViewerPlugin extends JavaPlugin {
 			return;
 		}
 		
-		this.executor = new NBTCommandExecutor();
-		this.getServer().getPluginCommand("nbtitem").setExecutor(executor);
+		executor = new NBTCommandExecutor();
+		getServer().getPluginCommand("nbtitem").setExecutor(executor);
+		
+		final NBTPlayerListener playerListener = new NBTPlayerListener();
+		getServer().getPluginManager().registerEvents(playerListener, this);
 	}
 
 	@Override
@@ -83,12 +86,16 @@ public class NBTViewerPlugin extends JavaPlugin {
 		
 	}
 	
+	public static Config getNBTConfig() {
+		return config;
+	}
+	
 	/**
 	 * Print the object's NBT to the given sender
 	 * @param nbt - object which use NBT
 	 * @param sender 
 	 */
-	public static void printNBT(NBTItemStack nbt, CommandSender sender) {
+	public static void printNBT(NBTObject nbt, CommandSender sender) {
 		printNBT(nbt, sender, "");		
 	}
 	
@@ -97,7 +104,7 @@ public class NBTViewerPlugin extends JavaPlugin {
 	 * @param nbt - object which use NBT
 	 * @param sender 
 	 */
-	public static void printNBT(NBTItemStack nbt, CommandSender sender, String objectName) {
+	public static void printNBT(NBTObject nbt, CommandSender sender, String objectName) {
 		final NBTTagCompound compound = nbt.getRootTag();
 		sender.sendMessage("--------------------------------------");
 		sender.sendMessage((objectName.isEmpty() ? "" : objectName + "'s ") + "NBT : ");

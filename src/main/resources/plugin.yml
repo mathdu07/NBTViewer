@@ -19,8 +19,11 @@ permissions:
     children:
       nbtviewer.item: true
       nbtviewer.help: true
+      nbtviewer.entity: true
   nbtviewer.item:
     default: op
   nbtviewer.help:
     default: true
+  nbtviewer.entity:
+    default: op
     
