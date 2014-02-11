@@ -4,7 +4,7 @@
 
   <groupId>fr.mathdu07</groupId>
   <artifactId>nbtviewer</artifactId>
-  <version>0.2-SNAPSHOT</version>
+  <version>1.6.4-0.2</version>
   <packaging>jar</packaging>
 
   <name>NBT Viewer</name>

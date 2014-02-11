@@ -1,5 +1,5 @@
 name: NBTViewer
-version: 0.2-SNAPSHOT
+version: 1.6.4-0.2
 author: mathdu07
 website: http://mathdu07.github.io/NBTViewer
 main: fr.mathdu07.nbtviewer.NBTViewerPlugin
