@@ -22,6 +22,7 @@ Permissions
 * nbtviewer.* : Gives all plugin's permission
     * nbtviewer.item: Gives the permission to use the command */nbtitem*
     * nbtviewer.help: Gives the permission to use the command */nbthelp*
+    * nbtviewer.entity: Gives the permission to see entity's NBT
     
 License
 -------
